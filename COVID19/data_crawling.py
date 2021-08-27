@@ -18,7 +18,6 @@ driver.find_element_by_xpath('//*[@id="_cs_production_type"]/div/div[4]/div/div[
 
 # 테이블 정보 조회 
 date_info = str(datetime.today().month).zfill(2) + str(datetime.today().day).zfill(2)
-# int(date_info)
 covid_regions = [] 
 
 for i in range(1, 4):
@@ -33,4 +32,27 @@ for i in range(1, 4):
     if i != 3:  # 클릭은 두 번만 해야 함 
         driver.find_element_by_xpath('//*[@id="_cs_production_type"]/div/div[4]/div/div[3]/div[5]/div/div/a[2]').click() 
 
-# covid_regions
+import pandas as pd 
+
+columns = ['수집일자', '지역', '누적확진자', '신규확진자']
+pd_data = pd.DataFrame(covid_regions, columns = columns)
+
+# 최근 7일간 일별 코로나 신규 확진자 데이터 수집 
+driver.find_element_by_xpath('//*[@id="_cs_production_type"]/div\
+        /div[4]/div/div[1]/div/div/div/ul/li[4]/a/span').click()
+
+# 일주일 동안의 Covid 정보 저장 
+covid_week = []
+
+for i in range(1,8):
+    driver.find_element_by_xpath('//*[@id="target2"]/dl/div[{}]/dd[1]'.format(i)).click()
+    date_info = driver.find_element_by_xpath('//*[@id="_cs_production_type"]/div/div[4]/div/div[5]/div[1]/div[1]/div/div[1]/dl/div[1]/dd[1]').text
+    occur_i = driver.find_element_by_xpath('//*[@id="_cs_production_type"]/div/div[4]/div/div[5]/div[1]/div[1]/div/div[1]/dl/div[2]/dd[1]').text
+    occur_o = driver.find_element_by_xpath('//*[@id="_cs_production_type"]/div/div[4]/div/div[5]/div[1]/div[1]/div/div[1]/dl/div[2]/dd[2]').text
+    occur_sum = driver.find_element_by_xpath('//*[@id="_cs_production_type"]/div/div[4]/div/div[5]/div[1]/div[1]/div/div[1]/dl/div[1]/dd[2]').text
+    
+    covid_week.append([date_info, occur_i, occur_o, occur_sum])
+
+columns = ['일자','국내 발생','해외 유입', '신규 합계']
+pd_data = pd.DataFrame(covid_week, columns=columns)
+# pd_data.to_excel('./covid_week.xlsx',index=False)   # MySQL로 구현 필요 

@@ -55,4 +55,5 @@ for i in range(1,8):
 
 columns = ['일자','국내 발생','해외 유입', '신규 합계']
 pd_data = pd.DataFrame(covid_week, columns=columns)
-# pd_data.to_excel('./covid_week.xlsx',index=False)   # MySQL로 구현 필요 
+
+driver.close()

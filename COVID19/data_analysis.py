@@ -46,3 +46,13 @@ for i in range(7):
     value_1.append(pd_week['국내 발생'][i])
     value_2.append(pd_week['해외 유입'][i])
     value_3.append(pd_week['신규 합계'][i])
+
+p1 = plt.bar(date_info, value_1, color='b', alpha=0.5, width=0.5)
+p2 = plt.bar(date_info, value_2, color='r', alpha=0.5,bottom=value_1,width=0.5)
+plt.title('최근 7일간 국내발생 및 해외유입 코로나 신규확진자 수',fontsize=15,pad=20)
+plt.ylabel('신규확진자 수',fontsize=13)
+plt.xlabel('일자',fontsize=13)
+plt.xticks(date_info,fontsize=15)
+plt.ylim([0,3000])
+plt.legend((p1[0],p2[0]), ('국내 발생','해외 유입'), fontsize=15)
+plt.show()

@@ -2,9 +2,9 @@
 ''' Application Design '''
 
 ''' func1. Data Crawling '''
-def get_news(site, keyword):
+def get_news(keyword):   # naver 
     pass
-
+asd
 
 ''' func2. MySQL '''
 def connect_mysql():

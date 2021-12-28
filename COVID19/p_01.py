@@ -5,7 +5,7 @@
 def get_news(keyword):   # naver 
     pass
 s
-
+sad
 ''' func2. MySQL '''
 def connect_mysql():
     pass 

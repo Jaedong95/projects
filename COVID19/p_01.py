@@ -4,7 +4,7 @@
 ''' func1. Data Crawling '''
 def get_news(keyword):   # naver 
     pass
-asdds
+asdd
 ''' func2. MySQL '''
 def connect_mysql():
     pass 

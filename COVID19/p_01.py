@@ -15,6 +15,7 @@ def store_data():
 def get_data():
     pass 
 
+asd
 ''' func3. Auto Crawling  - daily '''
 def daily_crawl():
     pass 

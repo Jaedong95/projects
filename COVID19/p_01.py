@@ -16,6 +16,6 @@ def get_data():
     pass 
 
 asd
-''' func3. Auto Crawling  - daily '''
+''' func3. Auto Crawling  - daily '''asdasd
 def daily_crawl():
     pass 

@@ -13,7 +13,7 @@ def store_data():
     pass
 
 def get_data():
-    pass asd
+    pass asdasd
 
 asd
 ''' func3. Auto Crawling  - daily '''asdasd

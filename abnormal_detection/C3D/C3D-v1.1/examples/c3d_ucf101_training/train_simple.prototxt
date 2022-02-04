@@ -1,4 +1,4 @@
-name: "C3D-UCF101Net"
+name: "C3D-UCF"
 layer {
   name: "data"
   type: "VideoData"
@@ -15,12 +15,12 @@ layer {
     mirror: true
   }
   video_data_param {
-    source: "train_01.lst"
-    root_folder: "/data/users/trandu/datasets/ucf101/frm/"
+    source: "Anomaly_Train.lst"
+    root_folder: "/workspace/UCF_CRIME/data/video/"
     new_length: 16
     new_height: 128
     new_width: 171
-    use_image: true
+    use_image: false
     show_data: false
     batch_size: 10
     shuffle: true
@@ -43,12 +43,12 @@ layer {
     mirror: false
   }
   video_data_param {
-    source: "train_01.lst"
-    root_folder: "/data/users/trandu/datasets/ucf101/frm/"
+    source: "Anomaly_Train.lst"
+    root_folder: "/workspace/UCF_CRIME/data/video/"
     new_length: 16
     new_height: 128
     new_width: 171
-    use_image: true
+    use_image: false
     show_data: false
     batch_size: 30
     shuffle: true
@@ -71,12 +71,12 @@ layer {
     mirror: false
   }
   video_data_param {
-    source: "test_01.lst"
-    root_folder: "/data/users/trandu/datasets/ucf101/frm/"
+    source: "Anomaly_Test.lst"
+    root_folder: "/workspace/UCF_CRIME/data/video/"
     new_length: 16
     new_height: 128
     new_width: 171
-    use_image: true
+    use_image: false
     show_data: false
     batch_size: 30
     shuffle: true
@@ -441,7 +441,7 @@ layer {
     decay_mult: 0
   }
   inner_product_param {
-    num_output: 101
+    num_output: 4
     weight_filler {
       type: "gaussian"
       std: 0.01

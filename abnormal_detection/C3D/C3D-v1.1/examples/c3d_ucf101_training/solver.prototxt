@@ -16,5 +16,5 @@ display: 20
 max_iter: 1000
 # snapshot intermediate results
 snapshot: 1000
-snapshot_prefix: "c3d_ucf101"
+snapshot_prefix: "c3d_ucf"
 solver_mode: GPU

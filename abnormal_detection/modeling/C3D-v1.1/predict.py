@@ -1,6 +1,5 @@
 import numpy as np
 import torch
-import caffemodel2pytorch
 import skimage.io as io
 
 from torch.autograd import Variable
@@ -69,15 +68,7 @@ def main():
     X = X.cuda()
 
     # get network pretrained model
-    net = caffemodel2pytorch.Net(
-        prototxt = 'train_ucf.prototxt',
-        weights = 'c3d_ucfcrime_iter_5.caffemodel',
-        caffe_proto = 'https://raw.githubusercontent.com/BVLC/caffe/master/src/caffe/proto/caffe.proto'
-    )
-
-    net.cuda()
-    net.eval()
-    torch.set_grad_enabled(False)
+    
 
     # perform prediction
     prediction = net(X)

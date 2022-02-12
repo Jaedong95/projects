@@ -1,0 +1,171 @@
+[References] 
+1. https://vlg.cs.dartmouth.edu/c3d/
+2. https://github.com/DavideA/c3d-pytorch
+3. https://tutorials.pytorch.kr/beginner/saving_loading_models.html   # pytorch model save & load (state_dict)
+4. http://caffe.berkeleyvision.org/installation.html  # setting C3D environment .. (caffe)
+5. https://github.com/facebookarchive/C3D/tree/master/C3D-v1.1/docs   # C3D github
+6. https://eungbean.github.io/2018/08/08/Ubuntu-Installation2-1/   # CUDA, CUDNN install on ubuntu 
+7. https://github.com/chuckcho/video-caffe   # other caffe version
+8. https://ichi.pro/ko/dajung-inseuteonseu-hagseub-216173524244000   # MIL (Multiple Instance Learning)
+9. https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=ymkim1959&logNo=220854174164   # caffe test.sh 
+10. https://github.com/pierluigiferrari/caffe_weight_converter/issues/3   # caffe model weight converter 
+11. https://github.com/rosasalberto/mil  # python mil libraries 
+12. https://seonho.gitbooks.io/deep-learning-with-python/content/chap2/dl/caffe.html   # caffe install final 
+13. https://developer.nvidia.com/cuda-gpus   # GPU compability 
+14. https://github.com/facebookresearch/VMZ
+15. https://www.cnblogs.com/wmr95mak/p/8715607.html
+16. https://github.com/chuckcho/video-caffe/blob/master/src/caffe/proto/caffe.proto#L410
+
+
+[Environment Setting]
+1. Docker Image 다운받기 
+$ docker pull bvlc/caffe:gpu
+
+* Docker 환경
+FROM nvidia/cuda:8.0-cudnn5-devel-ubuntu16.04
+LABEL maintainer caffe-maint@googlegroups.com
+
+2. Docker 실행 
+$ nvidia-docker run -it --ipc=host --name c3d_cori --gpus all -v /home/ubuntu/C3D:/workspace/ bvlc/caffe:gpu
+
+3. Docker Container 실행, 진입 
+$ docker attach c3d_cori
+$ docker start c3d_cori
+
+4. CUDA 및 CUDNN 설치  -> 이미 설치가 되어 있다면, 경로 잡아주기 
+$ cudnn 라이브러리가 보이지 않음  -> 
+$ nvcc --version   # /usr/local/cuda/bin/nvcc
+$ echo -e "\n## CUDA and cuDNN paths" >> ~/.bashrc
+$ echo 'export PATH=/usr/local/cuda-10.1/bin:${PATH}' >> ~/.bashrc
+$ echo 'export LD_LIBRARY_PATH=/usr/local/cuda-10.1/lib64:${LD_LIBRARY_PATH}' >> ~/.bashrc
+$ source ~/.bashrc
+
+$ tar xzvf cudnn-10.1-linux-x64-v7.6.4.38.tgz   # CUDA 버전에 맞는 CUDNN 설치: https://developer.nvidia.com/rdp/cudnn-archive (cuda 8.0 -> cudnn 5.0 install)
+$ cp cuda/lib64/* /usr/local/cuda/lib64/
+$ cp cuda/include/* /usr/local/cuda/include/
+$ chmod a+r /usr/local/cuda/lib64/libcudnn*
+$ chmod a+r /usr/local/cuda/include/cudnn.h
+
+$ cat /usr/local/cuda/include/cudnn.h | grep CUDNN_MAJOR -A 2   # CUDNN 설치 확인 
+$ apt-get install libcupti-dev   # 기타 패키지 설치 
+
+5. BLAS 설치 
+$ sudo apt-get install libatlas-base-dev    # ATLAS, Docker에는 이미 설치되어 있었음 
+
+6. Python / Matlab Wrapper 설치  (option)
+$ pip install -r /path/to/caffe/python/requirements.txt
+
+7. 다른 dependencies package 설치 
+$ sudo apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libboost-all-dev libhdf5-serial-dev
+
+8. 설치하려는 C3D-v1.x 버전 디렉토리 이동 
+$ cd C3D-v1.1 
+
+9. Compile 진행 
+$ cp Makefile.config.example Makefile.config
+$ make all   # make all -j8  (for faster build) 
+$ make test
+$ make runtest
+$ make pycaffe   # in caffe home directory
+# $ make matcaffe   # in caffe home directory
+
+10. 추가 작업
+$ export PYTHONPATH=$PYTHONPATH:/workspace/C3D-v1.1/python   # python path setting
+$ export PYTHONPATH=$PYTHONPATH:/workspace/video-caffe/python
+
+$ vi Makefile.config  -> PYTHON 경로 setting
+$ make pycaffe 
+
+[caffe 관련 작업] 
+$ which caffe  -> /opt/caffe/include/caffe/
+$ C3D caffe  -> 
+
+
+
+[Environment Setting2 -> not working at opencv build]
+0. docker run 
+$ nvidia-docker run -it --name c3d_predict --ipc=host --gpus all -v /home/ubuntu/:/workspace bvlc/caffe:gpu
+
+1. install curl
+$ apt-get install curl
+
+2. Boost 1.60.0의 caffe와의 호환성 문제 존재 -> Boost 1.59.0 설치
+$ curl -O http://jaist.dl.sourceforge.net/project/boost/boost/1.59.0/boost_1_59_0.tar.gz
+$ tar xvf boost_1_59_0.tar.gz
+$ cd boost_1_59_0
+$ ./bootstrap.sh --with-python=python
+$ sudo ./b2 -j8 install
+
+3. install OpenCV
+$ apt-get install build-essential
+$ apt-get install cmake git libqt4-dev libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
+$ apt-get install python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev
+
+$ git clone https://github.com/Itseez/opencv.git
+$ git clone https://github.com/Itseez/opencv_contrib.git
+$ cd opencv
+$ git checkout 3.0.0
+$ cd ../opencv_contrib
+$ git checkout 3.0.0 
+
+$ cd opencv
+$ mkdir build 
+$ cd build 
+
+* CUDA_ARCH_BIN, CUDA_ARCH_PTX  -> 본인의 GPU에 따라 바꿔줌 (reference 13 참고) 
+$ cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=/usr/local \
+-D BUILD_TIFF=ON -D BUILD_EXAMPLES=OFF \
+-D CUDA_GENERATION=Auto -D CUDA_ARCH_BIN=3.7 -D CUDA_ARCH_PTX=3.7 \
+-D CUDA_FAST_MATH=1 -D WITH_CUBLAS=1 \
+-D ENABLE_FAST_MATH=1 \
+-D WITH_OPENGL=ON \
+-D WITH_TBB=ON \
+-D WITH_QT=ON -D WITH_OPENGL=ON ..
+
+$ make -j8   # compile   -> error .. 
+$ make install   # install 
+$ echo "/usr/local/lib" | sudo tee -a /etc/ld.so.conf.d/opencv.conf
+
+4. pass no 3. install caffe dependencies
+$ apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libhdf5-serial-dev protobuf-compiler
+$ apt-get install libgflags-dev libgoogle-glog-dev liblmdb-dev
+
+
+
+[Training] 
+1. cd directory  
+$ cd C3D-v1.1/examples/c3d_ucf101_training/
+
+2. model train 
+$ run sh create_volume_mean.sh
+
+
+[Error] 
+1. hdf5.h:no such directory
+-> vi Makefile.config
+
+$ INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/include (before)
+$ INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/include /usr/include/hdf5/serial/ (after) 
+
+$ LIBRARIES += glog gflags protobuf boost_system boost_filesystem m hdf5_hl hdf5  (before)
+$ LIBRARIES += glog gflags protobuf boost_system boost_filesystem m hdf5_serial_hl hdf5_serial  (after)   # rename hdf5_hl and hdf5 to hdf5_serial_hl and hdf5_serial
+
+* 그래도 해결이 안 될 경우 
+$ cd /usr/lib/x86_64-linux-gnu
+
+$ sudo ln -s libhdf5_serial.so.[no].2 libhdf5.so
+$ sudo ln -s libhdf5_serial_hl.so.[no].2 libhdf5_hl.so
+
+
+2. Unknown bottom blob 'data' 
+
+3. Implicit dimension choice for softmax has been deprecated
+
+4. /bin/.sh: 1: bc: not found 
+$ sudo apt-get install bc 
+
+5. ../build/tools/caffe.bin permission denied 
+$ cd ../build/tools 
+$ chmod +x caffe.bin 
+
+

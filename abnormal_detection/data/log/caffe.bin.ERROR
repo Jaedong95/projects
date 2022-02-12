@@ -1,0 +1,6 @@
+Log file created at: 2022/02/04 16:03:45
+Running on machine: fe0728c07376
+Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+E0204 16:03:45.341143    21 image_io.cpp:146] Cannot open /workspace/UCF_CRIME/data/video/Stealing/Stealing021_x264.mp4
+E0204 16:03:45.342000    21 image_io.cpp:234] Cannot open /workspace/UCF_CRIME/data/video/Stealing/Stealing021_x264.mp4
+F0204 16:03:45.342027    21 video_data_layer.cpp:161] Check failed: ReadVideoToVolumeDatum((root_folder + file_list_[id]).c_str(), start_frm_list_[id], label_list_[id], new_length, new_height, new_width, sampling_rate, &datum) 

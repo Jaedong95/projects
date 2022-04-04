@@ -1,0 +1,16 @@
+filter{
+	csv{
+		separator => ","
+		columns => ["movie_nm","movie_sd","movie_p","movie_pc","movie_tpc","movie_sc","movie_vc","movie_ct","movie_fm","movie_vg","lat","lon"]
+	}
+	mutate {convert => ["lat", "float"]}
+	mutate {convert => ["lon", "float"]}
+	mutate {
+		add_field => {"[location-geotest][lat]" => "%{lat}"}
+		add_field => {"[location-geotest][loc]" => "%{lon}"}
+	}
+	mutate {
+		convert => {"[loc_test][lat]" => "float"}
+		convert => {"[loc_test][loc]" => "float"}
+	}
+}

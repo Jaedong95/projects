@@ -1,5 +1,5 @@
 import pandas as pd 
-asdsadas
+asdsada
 def data_analysis(covid_regions, covid_week):
     region_columns = ['수집일자', '지역', '누적확진자', '신규확진자']
     week_columns = ['일자','국내 발생','해외 유입', '신규 합계']

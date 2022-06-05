@@ -18,7 +18,7 @@
 
 3. 결과 평가 
 1) 협업 필터링을 이용한 제품 추천 
-![image](https://user-images.githubusercontent.com/48609095/172058878-dc58f19d-b609-44fd-ad97-996173fd7942.png)
+![initial](https://user-images.githubusercontent.com/48609095/172058878-dc58f19d-b609-44fd-ad97-996173fd7942.png)
 
 2) 행렬 분해를 이용한 제품 추천 
 
